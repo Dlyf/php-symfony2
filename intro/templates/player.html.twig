@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page {{player.name}}{% endblock %}
+
+{% block body %}
+
+<p>Infos sur le joueur {{player.name}}</p>
+<p>Numéro: {{player.num}}</p>
+{% if player.substitute %}
+<p>Remplaçant</p>
+{% else %}
+<p>Titulaire</p>
+{% endif %}
+<img src="{{player.photo}}" alt="{{player.name}}">
+
+{% endblock %}
