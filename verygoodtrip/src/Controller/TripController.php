@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Trip;
+use App\Entity\Picture;
 use App\Form\TripType;
+use App\Form\PictureType;
 use App\Repository\TripRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -64,15 +66,48 @@ class TripController extends Controller
         $form = $this->createForm(TripType::class, $trip);
         $form->handleRequest($request);
 
+        // formulaire photo
+        $picture = new Picture(); // création d'un objet vide
+        $formPicture = $this->createForm(PictureType::class, $picture);
+        $formPicture->handleRequest($request);
+
+        // si le formulaire de mise à jour d'un voyage a été soumis
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('trip_edit', ['id' => $trip->getId()]);
         }
 
+        // si le formulaire d'ajout de photo a été soumis
+        if ($formPicture->isSubmitted() && $formPicture->isValid()) {
+
+          // $file = objet de type UploadedFile
+          $file = $formPicture->get('path')->getData();
+          // récupération du nom
+          $fileName = $file->getClientOriginalName();
+          // déplacement du fichier
+          $file->move($this->getParameter('pictures_folder'), $fileName);
+
+          // remplissage(définition) de  la propriété path de la photo
+          $picture->setPath($fileName);
+
+          // relation entre le voyage et la photo
+
+          $trip->addPicture($picture);
+
+          // enregistrement de l'image en base de données
+          $em = $this->getDoctrine()->getManager();
+          $em->persist($picture);
+          $em->flush();
+
+          return $this->redirectToRoute('trip_edit', ['id' => $trip->getId()]);
+
+        }
+
         return $this->render('trip/edit.html.twig', [
             'trip' => $trip,
             'form' => $form->createView(),
+            'formPicture' => $formPicture->createView(),
         ]);
     }
 
