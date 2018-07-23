@@ -19,10 +19,8 @@ class UserType extends AbstractType
             ->add('password')
             ->add('role', ChoiceType::class, array(
               'choices'  => array(
-                'Main Statuses' => array(
-                  'Admin' => 'admin',
-                  'Client' => 'client',
-                )
+                  'Administrateur' => 'admin', // admin(label) => 'admin' (value)
+                  'Simple client' => 'client',
               ),
       ));
     }

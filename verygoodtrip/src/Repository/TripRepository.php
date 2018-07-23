@@ -19,6 +19,39 @@ class TripRepository extends ServiceEntityRepository
         parent::__construct($registry, Trip::class);
     }
 
+    public function findByCriteria(int $country, Array $dates, float $price)
+    {
+      $query = $this->createQueryBuilder('t');
+
+      if ($country != 0) {
+        $query
+        ->andWhere('t.country = :country')
+        ->setParameter('country', $country);
+      }
+
+      if ($dates['start'] != null) {
+        $query
+        ->andWhere('t.date_start > :date_start')
+        ->setParameter('date_start', $dates['start']);
+      }
+
+      if ($dates['end'] != null) {
+        $query
+        ->andWhere('t.date_end < :date_end')
+        ->setParameter('date_end', $dated['end']);
+      }
+
+      if ($price != null) {
+        $query
+        ->andWhere('t.price <= :price')
+        ->setParameter('price', $price);
+      }
+
+      $results = $query->getQuery()->getResult();
+
+      return $results;
+
+    }
 //    /**
 //     * @return Trip[] Returns an array of Trip objects
 //     */
