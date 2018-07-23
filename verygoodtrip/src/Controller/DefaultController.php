@@ -17,7 +17,15 @@ class DefaultController extends Controller
     {
         $countryRepo = $this->getDoctrine()->getRepository(Country::class);
         $tripRepo = $this->getDoctrine()->getRepository(Trip::class);
-        $countries = $countryRepo->findAll();
+        // $countries = $countryRepo->findAll();
+        // ->findAll() renvoie les pays ordonnés par id
+        // ->findBy permet de filter (arg1), de trier (arg2) et de limiter
+        // le nombre de résultats. Exemple :
+        // -> findBy(['club' => 'Juventus'], ['birthdate' => 'Desc'], 5)
+        // donne les objets (par exemple joueurs) dont la propriété team
+        // correspond à Juventus, classés  du plus jeune au plus vieux et limités
+        // à 5 résultats. Donne les 5 plus jeunes joueurs de la Juventus.
+        $countries = $countryRepo->findBy([], ['name' => 'ASC']);
         $trips = null;
 
         if ($request->isMethod('post')) {
