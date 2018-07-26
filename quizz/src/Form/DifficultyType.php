@@ -13,6 +13,7 @@ class DifficultyType extends AbstractType
     {
         $builder
             ->add('label')
+            ->add('weight')
         ;
     }
 

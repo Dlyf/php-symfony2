@@ -28,6 +28,11 @@ class Difficulty
      */
     private $questions;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $weight;
+
     public function __construct()
     {
         $this->questions = new ArrayCollection();
@@ -77,6 +82,18 @@ class Difficulty
                 $question->setDifficulty(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getWeight(): ?int
+    {
+        return $this->weight;
+    }
+
+    public function setWeight(int $weight): self
+    {
+        $this->weight = $weight;
 
         return $this;
     }
