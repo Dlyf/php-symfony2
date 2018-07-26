@@ -136,13 +136,11 @@ class ApiController extends Controller
       // on reçoit une requête ajax
       // ->getContent permet d'obtenir le corps (body) de la requête
       // de la requête, cad les données envoyées
-      $answers = $request->getContent(); // renvoie JSON
-      $answers_json = json_decode($answers_json, $assoc = true); // JSON => PHP
-
+      $answers_json = $request->getContent(); // renvoie JSON
+      $answers = json_decode($answers_json, $assoc = true); // JSON => PHP
       // $test = $answers['answers'][0][qid];
       $result = $this->checkAnswers($answers['answers']);
-
-      return $this->json_response(['test' => $test]);
+      return $this->json_response(['result' => $result]);
     }
 
     /**
